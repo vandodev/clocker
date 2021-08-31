@@ -12,9 +12,10 @@ import {
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import * as yup from "yup";
-import { Form, Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import { Logo } from "../components";
 import firebase from "../config/firebase/index.js";
+import Link from "next/link";
 
 const validationSchema = yup.object().shape({
   email: yup
@@ -40,7 +41,7 @@ export default function Home() {
       try {
         const user = await firebase
           .auth()
-          .createUserWithEmailAndPassword(values.email, values.password);
+          .signInWithEmailAndPassword(values.email, values.password);
         console.log(user);
       } catch (error) {
         console.log("ERROR:", error);
@@ -93,24 +94,6 @@ export default function Home() {
             </FormHelperText>
           )}
         </FormControl>
-        <FormControl id="username" p={4} isRequired>
-          <InputGroup size="lg">
-            <InputLeftAddon children="Cloker.work"></InputLeftAddon>
-            <Input
-              size="lg"
-              type="username"
-              value={values.username}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-          </InputGroup>
-
-          {touched.username && (
-            <FormHelperText textColor="#e74c3c">
-              {errors.username}
-            </FormHelperText>
-          )}
-        </FormControl>
 
         <Box p={4}>
           <Button
@@ -123,6 +106,7 @@ export default function Home() {
           </Button>
         </Box>
       </Box>
+      <Link href="/signup">Ainda não tem uma conta? Cadraste-se</Link>
     </Container>
   );
 }
