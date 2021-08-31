@@ -7,10 +7,12 @@ import {
   FormControl,
   FormLabel,
   FormHelperText,
+  InputGroup,
+  InputLeftAddon,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import * as yup from "yup";
-import { useFormik } from "formik";
+import { Form, Formik, useFormik } from "formik";
 import { Logo } from "../components";
 
 const validationSchema = yup.object().shape({
@@ -24,8 +26,16 @@ const validationSchema = yup.object().shape({
 });
 
 export default function Home() {
-  const { values, errors, touched, handleBlur, handleChange } = useFormik({
-    onSubmit: () => {},
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handlerSubmit,
+    isSubmitting,
+  } = useFormik({
+    onSubmit: (values, Form) => {},
     validationSchema,
     initialValues: {
       email: "",
@@ -73,26 +83,32 @@ export default function Home() {
             </FormHelperText>
           )}
         </FormControl>
-
-        <Box display="Flex" flexDirection="row" alignItems="center">
-          <Text>Cloker.work</Text>
-          <FormControl id="username" p={4} isRequired>
+        <FormControl id="username" p={4} isRequired>
+          <InputGroup size="lg">
+            <InputLeftAddon children="Cloker.work"></InputLeftAddon>
             <Input
+              size="lg"
               type="username"
               value={values.username}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {touched.username && (
-              <FormHelperText textColor="#e74c3c">
-                {errors.username}
-              </FormHelperText>
-            )}
-          </FormControl>
-        </Box>
+          </InputGroup>
+
+          {touched.username && (
+            <FormHelperText textColor="#e74c3c">
+              {errors.username}
+            </FormHelperText>
+          )}
+        </FormControl>
 
         <Box p={4}>
-          <Button colorScheme="blue" width="100%">
+          <Button
+            colorScheme="blue"
+            width="100%"
+            onClick={handlerSubmit}
+            isLoading={isSubmitting}
+          >
             Entrar
           </Button>
         </Box>
