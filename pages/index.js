@@ -1,3 +1,8 @@
+import { Logo } from "../components";
 export default function Home() {
-  return <div>Teste</div>;
+  return (
+    <div>
+      <Logo />
+    </div>
+  );
 }
