@@ -14,8 +14,7 @@ import { useEffect } from "react";
 import * as yup from "yup";
 import { Form, Formik, useFormik } from "formik";
 import { Logo } from "../components";
-
-import firebase from "../config/firebase";
+import firebase from "../config/firebase/index.js";
 
 const validationSchema = yup.object().shape({
   email: yup
@@ -34,10 +33,19 @@ export default function Home() {
     touched,
     handleBlur,
     handleChange,
-    handlerSubmit,
+    handleSubmit,
     isSubmitting,
   } = useFormik({
-    onSubmit: (values, Form) => {},
+    onSubmit: async (values, Form) => {
+      try {
+        const user = await firebase
+          .auth()
+          .createUserWithEmailAndPassword(values.email, values.password);
+        console.log(user);
+      } catch (error) {
+        console.log("ERROR:", error);
+      }
+    },
     validationSchema,
     initialValues: {
       email: "",
@@ -108,7 +116,7 @@ export default function Home() {
           <Button
             colorScheme="blue"
             width="100%"
-            onClick={handlerSubmit}
+            onClick={handleSubmit}
             isLoading={isSubmitting}
           >
             Entrar
