@@ -24,7 +24,6 @@ const validationSchema = yup.object().shape({
     .required("Preenchimento obrigatório"),
 
   password: yup.string().required("Preenchimento obrigatório"),
-  username: yup.string().required("Preenchimento obrigatório"),
 });
 
 export default function Home() {
@@ -50,7 +49,6 @@ export default function Home() {
     validationSchema,
     initialValues: {
       email: "",
-      username: "",
       password: "",
     },
   });
