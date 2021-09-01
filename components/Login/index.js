@@ -12,7 +12,7 @@ import { useEffect } from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { Logo } from "../Logo";
-import firebase, { persistenceMode } from "../../config/firebase/index.js";
+import { firebaseClient, persistenceMode } from "../../config/firebase/client";
 import Link from "next/link";
 
 const validationSchema = yup.object().shape({
@@ -35,12 +35,12 @@ export const Login = () => {
     isSubmitting,
   } = useFormik({
     onSubmit: async (values, Form) => {
-      firebase.auth().setPersistence(persistenceMode);
+      firebaseClient.auth().setPersistence(persistenceMode);
       try {
-        const user = await firebase
+        const user = await firebaseClient
           .auth()
           .signInWithEmailAndPassword(values.email, values.password);
-        console.log(user);
+        console.log(firebaseClient);
       } catch (error) {
         console.log("ERROR:", error);
       }

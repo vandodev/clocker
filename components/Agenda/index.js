@@ -1,3 +1,11 @@
+import { Container, Button } from "@chakra-ui/react";
+import { firebaseClient } from "../../config/firebase/client";
+
 export const Agenda = () => {
-  return <div>Agenda</div>;
+  const logout = () => firebaseClient.auth().signOut();
+  return (
+    <Container>
+      <Button onClick={logout}>Sair</Button>
+    </Container>
+  );
 };
