@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { Logo } from "../components";
-import firebase from "../config/firebase/index.js";
+import firebase, { persistenceMode } from "../config/firebase/index.js";
 import Link from "next/link";
 
 const validationSchema = yup.object().shape({
@@ -37,6 +37,7 @@ export default function Home() {
     isSubmitting,
   } = useFormik({
     onSubmit: async (values, Form) => {
+      firebase.auth().setPersistence(persistenceMode);
       try {
         const user = await firebase
           .auth()
@@ -52,6 +53,11 @@ export default function Home() {
       password: "",
     },
   });
+
+  useEffect(() => {
+    console.log("Sessão ativa? ", firebase.auth().currentUser);
+  }, []);
+
   return (
     <Container p={4} centerContent>
       <Logo />
