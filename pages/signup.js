@@ -14,8 +14,9 @@ import { useEffect } from "react";
 import * as yup from "yup";
 import { Form, Formik, useFormik } from "formik";
 import { Logo } from "../components";
-import { firebaseClient } from "../config/firebase/client";
+import { useAuth } from "../components/Auth";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const validationSchema = yup.object().shape({
   email: yup
@@ -28,6 +29,9 @@ const validationSchema = yup.object().shape({
 });
 
 export default function Home() {
+  const [auth, { signup }] = useAuth();
+  const router = useRouter();
+
   const {
     values,
     errors,
@@ -37,16 +41,7 @@ export default function Home() {
     handleSubmit,
     isSubmitting,
   } = useFormik({
-    onSubmit: async (values, Form) => {
-      try {
-        const user = await firebaseClient
-          .auth()
-          .createUserWithEmailAndPassword(values.email, values.password);
-        console.log(user);
-      } catch (error) {
-        console.log("ERROR:", error);
-      }
-    },
+    onSubmit: signup,
     validationSchema,
     initialValues: {
       email: "",
@@ -54,6 +49,11 @@ export default function Home() {
       password: "",
     },
   });
+
+  useEffect(() => {
+    auth.user && router.push("/agenda");
+  }, [auth.user]);
+
   return (
     <Container p={4} centerContent>
       <Logo />
