@@ -22,23 +22,15 @@ export const login = async ({ email, password }) => {
 export const signup = async ({ email, password, username }) => {
   try {
     // await firebaseClient.auth().createUserWithEmailAndPassword(email, password);
-    // await login({ email, password });
-
-    // const { data } = await axios.post("/api/profile", {
-    //   // userId: user.uid,
-    //   userId: user.getIdToken(),
-    //   username: values.username,
-    // });
+    const user = await login({ email, password });
+    const token = await user.getIdToken();
 
     const { data } = await axios({
       method: "post",
       url: "/api/profile",
-      data: {
-        // username: values.username,
-        username,
-      },
+      data: { username },
       headers: {
-        Authorization: `Bearer`,
+        Authorization: `Bearer ${token}`,
         // Authorization: `Bearer ${user.getIdToken}`,
       },
     });
