@@ -39,13 +39,14 @@ export const AuthProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    firebaseClient.auth().onAuthStateChanged((user) => {
+    const unsubscribe = firebaseClient.auth().onAuthStateChanged((user) => {
       setAuth({
         loading: false,
         // user: !!user,
         user,
       });
     });
+    return () => unsubscribe();
   }, []);
 
   return (

@@ -9,10 +9,10 @@ import {
   FormHelperText,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
+import { useRouter } from "next/router";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { Logo } from "../Logo";
-import { useAuth } from "../Auth";
+import { Logo, useAuth } from "../components";
 import Link from "next/link";
 
 const validationSchema = yup.object().shape({
@@ -24,8 +24,10 @@ const validationSchema = yup.object().shape({
   password: yup.string().required("Preenchimento obrigatório"),
 });
 
-export const Login = () => {
-  const [, { login }] = useAuth();
+export default function Login() {
+  const [auth, { login }] = useAuth();
+  const router = useRouter();
+
   const {
     values,
     errors,
@@ -42,6 +44,10 @@ export const Login = () => {
       password: "",
     },
   });
+
+  useEffect(() => {
+    auth.user && router.push("/agenda");
+  }, [auth.user]);
 
   return (
     <Container p={4} centerContent>
@@ -98,4 +104,4 @@ export const Login = () => {
       <Link href="/signup">Ainda não tem uma conta? Cadraste-se</Link>
     </Container>
   );
-};
+}
